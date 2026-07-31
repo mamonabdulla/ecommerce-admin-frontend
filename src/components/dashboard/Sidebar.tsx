@@ -59,7 +59,7 @@ const menuItems = [
 
   {
     name: "Attributes",
-    path: "/attributes",
+    path: "/dashboard/attributes",
     permission: menuPermissions.Attributes,
   },
 
