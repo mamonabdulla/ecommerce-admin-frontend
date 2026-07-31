@@ -374,8 +374,7 @@ emptyVariant
 
 async function apiRequest(
   url:string,
-  options:RequestInit={}
-){
+  options:any={}){
 
   const response =
     await api.request({
