@@ -5,6 +5,8 @@ import {
   useState,
 } from "react";
 
+import api from "@/lib/api";
+
 
 
 interface Media {
@@ -200,8 +202,7 @@ interface VariantForm {
 export default function ProductsPage(){
 
 
-const API =
-"http://localhost:3000";
+
 
 
 
@@ -372,69 +373,18 @@ emptyVariant
 
 
 async function apiRequest(
-url:string,
-options:RequestInit={}
+  url:string,
+  options:RequestInit={}
 ){
 
-
-const token =
-localStorage.getItem("access_token")
-||
-localStorage.getItem("token")
-||
-localStorage.getItem("accessToken");
+  const response =
+    await api.request({
+      url,
+      ...options,
+    });
 
 
-
-const response =
-await fetch(
-url,
-{
-
-...options,
-
-headers:{
-
-"Content-Type":"application/json",
-
-...(token
-?
-{
-Authorization:`Bearer ${token}`
-}
-:
-{}
-)
-
-}
-
-}
-
-);
-
-
-
-const data =
-await response.json()
-.catch(
-()=>null
-);
-
-
-
-if(!response.ok){
-
-throw new Error(
-data?.message ||
-"Request failed"
-);
-
-}
-
-
-
-return data;
-
+  return response.data;
 
 }
 
@@ -477,28 +427,23 @@ await Promise.all([
 
 
 apiRequest(
-`${API}/products`
-),
+  "/products"),
 
 
 apiRequest(
-`${API}/brands`
-),
+  "/brands"),
 
 
 apiRequest(
-`${API}/categories`
-),
+  "/categories"),
 
 
 apiRequest(
-`${API}/media`
-),
+  "/media"),
 
 
 apiRequest(
-`${API}/attributes`
-)
+  "/attributes")
 
 
 ]);
@@ -794,6 +739,14 @@ const payload={
 ...form,
 
 
+brandId:
+form.brandId === ""
+?
+null
+:
+form.brandId,
+
+
 price:
 form.price===""
 ?
@@ -839,14 +792,12 @@ if(editing){
 
 await apiRequest(
 
-`${API}/products/${editing.id}`,
-
+`/products/${editing.id}`,
 {
 
 method:"PATCH",
 
-body:
-JSON.stringify(payload)
+data: payload
 
 }
 
@@ -860,14 +811,12 @@ else{
 
 await apiRequest(
 
-`${API}/products`,
-
+`/products`,
 {
 
 method:"POST",
 
-body:
-JSON.stringify(payload)
+data: payload
 
 }
 
@@ -929,8 +878,7 @@ try{
 
 await apiRequest(
 
-`${API}/products/${id}`,
-
+`/products/${id}`,
 {
 
 method:"DELETE"
@@ -1113,14 +1061,12 @@ if(editingVariant){
 
 await apiRequest(
 
-`${API}/product-variants/${editingVariant.id}`,
-
+`/product-variants/${editingVariant.id}`,
 {
 
 method:"PATCH",
 
-body:
-JSON.stringify(payload)
+data: payload
 
 }
 
@@ -1134,14 +1080,12 @@ else{
 
 await apiRequest(
 
-`${API}/product-variants`,
-
+`/product-variants`,
 {
 
 method:"POST",
 
-body:
-JSON.stringify(payload)
+data: payload
 
 }
 
@@ -1204,8 +1148,7 @@ try{
 
 await apiRequest(
 
-`${API}/product-variants/${id}`,
-
+`/product-variants/${id}`,
 {
 
 method:"DELETE"
