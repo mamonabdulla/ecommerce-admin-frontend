@@ -65,7 +65,7 @@ const menuItems = [
 
   {
     name: "Products",
-    path: "/products",
+    path: "/dashboard/products",
     permission: menuPermissions.Products,
   },
 
