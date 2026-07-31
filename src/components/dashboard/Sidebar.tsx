@@ -53,7 +53,7 @@ const menuItems = [
 
   {
     name: "Brands",
-    path: "/brands",
+    path: "/dashboard/brands",
     permission: menuPermissions.Brands,
   },
 
